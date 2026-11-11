@@ -1,0 +1,38 @@
+# Turtle-s-Gone-Wild
+
+Pavan’s growing TurtleBot build journal: ROS 2 Jazzy, Raspberry Pi, explained terminal commands, and future experiments.
+
+- [Interactive journal](https://PavanShettyhere.github.io/Turtle-s-Gone-Wild/)
+- [Full day-by-day document](JOURNAL.md)
+- [Template for the next day](DAY-TEMPLATE.md)
+
+## Accuracy
+
+Day 1 milestones come from the author’s description. Detailed commands are a reference reconstruction, not recovered terminal history. Day 2 assumes a Pi installation and is explicitly awaiting confirmation. Hardware model, actual SD-card image, dates, and outputs remain unconfirmed. Official sources are linked in the journal. Robot-specific bringup is intentionally pending hardware identification.
+
+## Add a day
+
+Edit `docs/journal.json`, copy an existing day structure with a new unique ID, and add the actual commands, explanations, output, errors, and evidence. Then:
+
+```bash
+python3 scripts/build.py
+git add docs/journal.json docs/index.html docs/JOURNAL.md JOURNAL.md
+git diff --cached
+git commit -m "Document the next TurtleBot day"
+git push
+```
+
+The workflow rebuilds and deploys `docs/` to GitHub Pages. Configure **Settings → Pages → Source → GitHub Actions** if setting up a new copy.
+
+## Preview
+
+```bash
+python3 scripts/build.py
+python3 -m http.server 8000 --directory docs
+```
+
+Open http://localhost:8000. No npm packages, external fonts, or runtime services are needed. Search, collapsible steps, copy buttons, local reading progress, reduced-motion support, and print-to-PDF are included. Reading progress stays in the current browser; it is not shared with GitHub.
+
+## Files
+
+`docs/journal.json` is the content source. `scripts/template.html` and `docs/style.css` define the presentation. `docs/app.js` handles interactions. `scripts/build.py` generates both document formats. Do not edit generated files directly.

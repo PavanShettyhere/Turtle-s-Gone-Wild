@@ -1,0 +1,290 @@
+{
+  "days": [
+    {
+      "id": "day-1",
+      "label": "Day 01",
+      "title": "The foundation",
+      "subtitle": "Laptop, ROS 2 Jazzy & a fresh SD card",
+      "status": "Milestones reported · commands reconstructed",
+      "intro": "You reported installing ROS 2 Jazzy on your laptop and preparing a Raspberry Pi SD card on Day 1. The steps below explain a reference workflow; your original commands, dates, screenshots, and errors have not been supplied.",
+      "steps": [
+        {
+          "title": "Check the operating system",
+          "device": "Laptop / Pi",
+          "body": "Reference procedure, not a recovered terminal history. These apt instructions assume Ubuntu 24.04 (Noble). Do not apply them unchanged to Raspberry Pi OS or Ubuntu 22.04.",
+          "commands": [
+            {
+              "code": "cat /etc/os-release",
+              "why": "Prints the Linux distribution and version. Look for Ubuntu and VERSION_ID=\"24.04\"."
+            },
+            {
+              "code": "dpkg --print-architecture",
+              "why": "Prints the package architecture: typically amd64 on a laptop or arm64 on a 64-bit Pi installation."
+            }
+          ],
+          "check": "Record the actual OS and architecture before continuing."
+        },
+        {
+          "title": "Prepare a UTF-8 locale",
+          "device": "Laptop / Pi",
+          "body": "A locale defines language and text encoding. An existing UTF-8 locale is fine; the following is an example configuration.",
+          "commands": [
+            {
+              "code": "locale",
+              "why": "Shows the current language and encoding settings."
+            },
+            {
+              "code": "sudo apt update\nsudo apt install locales",
+              "why": "Refreshes the package index, then installs locale management tools. sudo runs with administrator privileges."
+            },
+            {
+              "code": "sudo locale-gen en_US en_US.UTF-8\nsudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8\nexport LANG=en_US.UTF-8",
+              "why": "Generates locale data, saves defaults, and sets the language in this shell."
+            }
+          ],
+          "check": "Run locale again and check for UTF-8."
+        },
+        {
+          "title": "Connect Ubuntu to the ROS package repository",
+          "device": "Laptop / Pi",
+          "body": "Ubuntu needs the ROS package source before apt can find Jazzy. This uses the official ros2-apt-source package. Run each block in the same terminal and stop if a download fails.",
+          "commands": [
+            {
+              "code": "sudo apt install software-properties-common curl\nsudo add-apt-repository universe",
+              "why": "Installs repository tools and curl, then enables Ubuntu’s Universe software collection."
+            },
+            {
+              "code": "sudo apt update\nexport ROS_APT_SOURCE_VERSION=$(curl -fsSL https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F '\"tag_name\"' | cut -d '\"' -f 4)\nprintf \"%s\\n\" \"$ROS_APT_SOURCE_VERSION\"",
+              "why": "Refreshes apt. The pipeline fetches the latest release metadata, selects tag_name, and extracts its value. $(...) captures output; export makes the variable available to child processes. Check that a version was printed."
+            },
+            {
+              "code": "curl -fL -o /tmp/ros2-apt-source.deb \"https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb\"\nsudo dpkg -i /tmp/ros2-apt-source.deb",
+              "why": "Downloads the package for this Ubuntu codename. -f fails on HTTP errors, -L follows redirects, and -o selects the output file. dpkg installs the repository configuration package."
+            }
+          ],
+          "check": "The download and dpkg command must both succeed."
+        },
+        {
+          "title": "Install Jazzy on the laptop",
+          "device": "Laptop",
+          "body": "Use the desktop package for a development laptop. Review proposed upgrades before accepting them.",
+          "commands": [
+            {
+              "code": "sudo apt update\nsudo apt upgrade\nsudo apt install ros-jazzy-desktop",
+              "why": "Refreshes packages, upgrades installed software, and installs Jazzy with desktop tools."
+            },
+            {
+              "code": "source /opt/ros/jazzy/setup.bash\nprintenv ROS_DISTRO",
+              "why": "Loads ROS into the current Bash terminal, then prints the selected ROS distribution."
+            },
+            {
+              "code": "grep -qxF 'source /opt/ros/jazzy/setup.bash' ~/.bashrc || echo 'source /opt/ros/jazzy/setup.bash' >> ~/.bashrc",
+              "why": "Optional: adds the setup line to future interactive Bash sessions only if absent. || runs the second command when the first does not find a match. >> appends."
+            }
+          ],
+          "check": "ROS_DISTRO should print jazzy. This is an expected result, not an observed result from your laptop."
+        },
+        {
+          "title": "Test two ROS nodes",
+          "device": "Laptop",
+          "body": "Open two terminals. A node is a running ROS program; a topic carries typed messages between nodes.",
+          "commands": [
+            {
+              "code": "source /opt/ros/jazzy/setup.bash\nros2 run demo_nodes_cpp talker",
+              "why": "Terminal A: ros2 run starts the talker executable from the demo_nodes_cpp package."
+            },
+            {
+              "code": "source /opt/ros/jazzy/setup.bash\nros2 run demo_nodes_py listener",
+              "why": "Terminal B: starts the Python listener. Keep the talker running."
+            }
+          ],
+          "check": "The listener should receive the talker’s messages. Stop each with Ctrl+C; record your actual output."
+        },
+        {
+          "title": "Write the Raspberry Pi SD card",
+          "device": "Laptop → microSD",
+          "body": "You install an operating-system image onto the SD card; the Raspberry Pi is the computer that boots it. Your actual image is not yet known. For this Ubuntu/Jazzy reference path, choose a compatible Ubuntu Server 24.04 LTS 64-bit image for your exact Pi model.\n\n1. Install and open Raspberry Pi Imager from the official Raspberry Pi website.\n2. Select your exact Pi model and the intended OS image (or use a downloaded compatible image).\n3. Select the microSD card by capacity/device name. Writing erases the selected device; check it carefully.\n4. If that image supports customisation, set hostname, username, networking, and SSH; otherwise finish setup with a keyboard and display after boot. Do not publish passwords or SSH private keys.\n5. Write, wait for verification, safely eject, insert into the powered-off Pi, then connect a suitable power supply.\n6. Allow the first boot to finish. Record the image filename, Pi model, and first successful login.",
+          "commands": [],
+          "check": "A successful first login and verified OS version are the useful evidence. Your exact image and date still need to be added."
+        }
+      ]
+    },
+    {
+      "id": "day-2",
+      "label": "Day 02",
+      "title": "Bring the Pi online",
+      "subtitle": "A proposed ROS setup & communication check",
+      "status": "Awaiting your Day 2 notes",
+      "intro": "You mentioned installing ROS 2 on Day 2. This chapter assumes you meant installing ROS 2 Jazzy on the Raspberry Pi. That assumption and every result below need your confirmation. Jazzy is the ROS release, not a separate operating system.",
+      "steps": [
+        {
+          "title": "Log in and identify the Pi",
+          "device": "Laptop → Pi",
+          "body": "Use the username and address you configured. Replace PI_USER and PI_IP with real values; do not paste these placeholders unchanged.",
+          "commands": [
+            {
+              "code": "ssh PI_USER@PI_IP",
+              "why": "Opens an encrypted terminal on the Pi. On first connection, verify the host fingerprint using a trusted local view of the Pi."
+            },
+            {
+              "code": "hostname\ncat /etc/os-release\ndpkg --print-architecture",
+              "why": "Confirms which machine you are on, its OS version, and its package architecture."
+            }
+          ],
+          "check": "Continue with this reference only for Ubuntu 24.04 arm64 on a compatible Pi."
+        },
+        {
+          "title": "Install ROS on the Pi",
+          "device": "Pi",
+          "body": "Repeat Day 1’s UTF-8 locale and ROS repository steps on the Pi itself. Installing ROS on the laptop does not install it on the Pi.",
+          "commands": [
+            {
+              "code": "sudo apt update\nsudo apt upgrade\nsudo apt install ros-jazzy-ros-base ros-jazzy-demo-nodes-cpp",
+              "why": "Installs the smaller ROS base and the demonstration executables used in the communication check."
+            },
+            {
+              "code": "source /opt/ros/jazzy/setup.bash\nprintenv ROS_DISTRO",
+              "why": "Loads Jazzy into this terminal and checks the selected distribution."
+            }
+          ],
+          "check": "Expected: jazzy. Record any package error before moving on."
+        },
+        {
+          "title": "Put both machines in the same ROS domain",
+          "device": "Laptop + Pi",
+          "body": "Use the same local network, avoiding guest/client isolation. The domain number is an example; use the same number on both devices. This shell configuration must be repeated in each ROS terminal. This reference assumes DDS middleware; these discovery variables do not configure rmw_zenoh.",
+          "commands": [
+            {
+              "code": "source /opt/ros/jazzy/setup.bash\nexport ROS_DOMAIN_ID=30\nexport ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET",
+              "why": "Loads ROS, chooses a shared discovery domain, and allows discovery on the local subnet. These exports affect this shell and its child processes."
+            }
+          ],
+          "check": "Matching domain IDs alone do not guarantee discovery: network, firewall, and middleware settings also matter."
+        },
+        {
+          "title": "Prove laptop ↔ Pi messaging",
+          "device": "Laptop + Pi",
+          "body": "This is a suggested verification, not a confirmed Day 2 result.",
+          "commands": [
+            {
+              "code": "ros2 run demo_nodes_cpp talker",
+              "why": "On the Pi, starts a publisher. Leave it running."
+            },
+            {
+              "code": "ros2 run demo_nodes_py listener",
+              "why": "On the laptop, starts the listener after the environment block above."
+            },
+            {
+              "code": "ros2 topic list\nros2 node list",
+              "why": "In another configured terminal, lists discovered topics and nodes."
+            }
+          ],
+          "check": "Look for received messages on the laptop. Save a short output sample, then stop the demos with Ctrl+C."
+        },
+        {
+          "title": "Separate ROS setup from robot bringup",
+          "device": "TurtleBot hardware",
+          "body": "ROS installation is only the foundation. The TurtleBot model, Pi model, motor-controller firmware, LiDAR model, USB permissions, robot packages, and launch configuration must be identified before writing exact bringup commands. TurtleBot3 instructions should only be used if this is a TurtleBot3.\n\nStill to record: model, OS image, package branches, any workspace build, firmware steps, errors and fixes, launch command, and actual test result. No motor or firmware commands are presented as completed.",
+          "commands": [],
+          "check": "Next milestone: confirm hardware and add the commands you actually ran."
+        }
+      ]
+    },
+    {
+      "id": "git",
+      "label": "Git & GitHub",
+      "title": "Give the journey a home",
+      "subtitle": "Your supplied commands, explained line by line",
+      "status": "Commands supplied by you · execution not evidenced",
+      "intro": "These are the initial repository commands you pasted. They belong in a project folder on your development computer, not in an arbitrary system directory. Keep this setup chapter separate from your day numbering until you decide when it happened.",
+      "steps": [
+        {
+          "title": "Create the first commit",
+          "device": "Laptop / project folder",
+          "body": "These bootstrap commands are for a new repository. Do not repeat them as your daily update routine.",
+          "commands": [
+            {
+              "code": "echo \"# Turtle-s-Gone-Wild\" >> README.md",
+              "why": "echo prints the Markdown title. >> appends it to README.md, creating the file if needed. Repeating this adds duplicate titles."
+            },
+            {
+              "code": "git init",
+              "why": "Creates local Git metadata so this folder can track file revisions."
+            },
+            {
+              "code": "git add README.md",
+              "why": "Stages only README.md for the next commit. Other files are not included."
+            },
+            {
+              "code": "git commit -m \"first commit\"",
+              "why": "Records the staged snapshot with a message. Git needs your configured author name and email."
+            },
+            {
+              "code": "git branch -M main",
+              "why": "Renames the current branch to main. -M permits replacing an existing branch name; use carefully in an established repository."
+            },
+            {
+              "code": "git remote add origin https://github.com/PavanShettyhere/Turtle-s-Gone-Wild.git",
+              "why": "Registers this GitHub URL as the remote named origin. It does not create the GitHub repository."
+            },
+            {
+              "code": "git push -u origin main",
+              "why": "Uploads main and remembers origin/main as its upstream. Requires repository access and working GitHub authentication."
+            }
+          ],
+          "check": "Expected: the committed README appears on GitHub."
+        },
+        {
+          "title": "Publish later journal updates",
+          "device": "Project folder",
+          "body": "Use this routine after editing docs/journal.json. The build regenerates both the readable Markdown document and the interactive website from the same content.",
+          "commands": [
+            {
+              "code": "python3 scripts/build.py",
+              "why": "Regenerates JOURNAL.md and docs/index.html. No third-party Python packages are needed."
+            },
+            {
+              "code": "git add docs/journal.json docs/index.html docs/JOURNAL.md JOURNAL.md\ngit diff --cached\ngit commit -m \"Document the next TurtleBot day\"\ngit push",
+              "why": "Stages the journal changes, lets you review them, saves a commit, and uploads it. The Pages workflow publishes the docs folder."
+            }
+          ],
+          "check": "Check the Pages workflow in the repository’s Actions tab."
+        }
+      ]
+    }
+  ],
+  "references": [
+    [
+      "ROS 2 Jazzy installation",
+      "https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html"
+    ],
+    [
+      "Official installation source",
+      "https://github.com/ros2/ros2_documentation/blob/jazzy/source/Installation/Ubuntu-Install-Debs.rst"
+    ],
+    [
+      "ROS apt repository setup",
+      "https://github.com/ros2/ros2_documentation/blob/jazzy/source/Installation/_Apt-Repositories.rst"
+    ],
+    [
+      "ROS locale setup",
+      "https://github.com/ros2/ros2_documentation/blob/jazzy/source/Installation/_Ubuntu-Set-Locale.rst"
+    ],
+    [
+      "Raspberry Pi getting started",
+      "https://www.raspberrypi.com/documentation/computers/getting-started.html"
+    ],
+    [
+      "TurtleBot3 SBC setup (model-specific)",
+      "https://emanual.robotis.com/docs/en/platform/turtlebot3/sbc_setup/"
+    ],
+    [
+      "ROS discovery configuration",
+      "https://docs.ros.org/en/jazzy/Tutorials/Advanced/Improved-Dynamic-Discovery.html"
+    ],
+    [
+      "GitHub Pages workflows",
+      "https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages"
+    ]
+  ]
+}
