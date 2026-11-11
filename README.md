@@ -8,7 +8,7 @@ Pavan’s growing TurtleBot build journal: ROS 2 Jazzy, Raspberry Pi, explained 
 
 ## Accuracy
 
-Day 1 milestones come from the author’s description. Detailed commands are a reference reconstruction, not recovered terminal history. Day 2 assumes a Pi installation and is explicitly awaiting confirmation. Confirmed hardware: Raspberry Pi 4B, TurtleBot Burger, and a 32 GB SanDisk microSD card. The author described the image as “Raspberry Pi”; the exact OS/version and architecture, dates, and outputs remain unconfirmed. Ubuntu instructions are conditional reference steps and must not be applied unchanged to Raspberry Pi OS. Official sources are linked in the journal. Robot-specific bringup is intentionally pending hardware identification.
+Day 1 milestones come from the author’s description. Detailed commands are a reference reconstruction, not recovered terminal history. Day 2 assumes a Pi installation and is explicitly awaiting confirmation. Confirmed hardware: Raspberry Pi 4B, TurtleBot Burger, and a 32 GB SanDisk microSD card. Supplied terminal evidence verifies the Pi currently runs Ubuntu 24.04.5 LTS (Noble Numbat), arm64. The original image filename, flashing sequence, dates, and ROS installation/test outputs remain unconfirmed. Official sources are linked in the journal. Robot-specific bringup is intentionally pending hardware identification.
 
 ## Add a day
 

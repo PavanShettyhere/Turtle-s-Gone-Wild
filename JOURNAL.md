@@ -11,7 +11,7 @@ By Pavan Shetty · Living notebook
 
 Milestones reported · commands reconstructed
 
-You reported installing ROS 2 Jazzy on your laptop and preparing a Raspberry Pi SD card on Day 1. The steps below explain a reference workflow; your original commands, dates, screenshots, and errors have not been supplied. Your confirmed hardware is a Raspberry Pi 4B, a TurtleBot Burger, and a 32 GB SanDisk microSD card. You described the card image as “Raspberry Pi”; the exact OS name, version, and 32-bit/64-bit architecture still need confirmation.
+You reported installing ROS 2 Jazzy on your laptop and preparing a Raspberry Pi SD card on Day 1. Your confirmed hardware is a Raspberry Pi 4B, a TurtleBot Burger, and a 32 GB SanDisk microSD card. Later terminal evidence confirms that the Pi currently runs Ubuntu 24.04.5 LTS (Noble Numbat), arm64. The exact original image filename and flashing sequence have not been supplied. Detailed installation commands below are reference instructions, not recovered terminal history.
 
 ### 1. Check the operating system
 
@@ -157,7 +157,7 @@ Terminal B: starts the Python listener. Keep the talker running.
 
 **Run on:** Laptop → microSD
 
-You install an operating-system image onto the SD card; the Raspberry Pi is the computer that boots it. Your card is a 32 GB SanDisk, used with a Raspberry Pi 4B and TurtleBot Burger. You described the installed image as “Raspberry Pi”; whether this means Raspberry Pi OS, and its release and architecture, remain unconfirmed. The Ubuntu image below is an alternative reference path, not a claim about the card you flashed. For this Ubuntu/Jazzy reference path, choose a compatible Ubuntu Server 24.04 LTS 64-bit image for your exact Pi model.
+You install an operating-system image onto the SD card; the Raspberry Pi is the computer that boots it. Your card is a 32 GB SanDisk, used with a Raspberry Pi 4B and TurtleBot Burger. Your terminal output confirms Ubuntu 24.04.5 LTS (Noble Numbat), arm64, on the Pi. This identifies the currently running OS; it does not establish the original image filename, original point release, or whether the image was Server or Desktop. The following flashing sequence is a reference reconstruction. For this Ubuntu/Jazzy reference path, choose a compatible Ubuntu Server 24.04 LTS 64-bit image for your exact Pi model.
 
 1. Install and open Raspberry Pi Imager from the official Raspberry Pi website.
 2. Select your exact Pi model and the intended OS image (or use a downloaded compatible image).
@@ -166,21 +166,21 @@ You install an operating-system image onto the SD card; the Raspberry Pi is the 
 5. Write, wait for verification, safely eject, insert into the powered-off Pi, then connect a suitable power supply.
 6. Allow the first boot to finish. Record the image filename, Pi model, and first successful login.
 
-**Checkpoint:** Record the image filename and the output of cat /etc/os-release and dpkg --print-architecture from the Pi. Do not reflash the card just to match this reference.
+**Checkpoint:** Verified from your supplied terminal output: the Pi runs Ubuntu 24.04.5 LTS, codename noble, architecture arm64. The original image filename and exact flashing procedure remain to be recorded; no reflash is needed to identify the current OS.
 
 
 
 ## Day 02 — Bring the Pi online
 
-Hardware confirmed · OS and Day 2 actions awaiting confirmation
+Hardware and Pi OS verified · Day 2 installation history pending
 
-You mentioned installing ROS 2 on Day 2. This chapter assumes you meant installing ROS 2 Jazzy on the Raspberry Pi. That assumption and every result below need your confirmation. Jazzy is the ROS release, not a separate operating system. Your hardware is now confirmed as Raspberry Pi 4B and TurtleBot Burger with a 32 GB SanDisk card. Since the image was described as “Raspberry Pi,” the Ubuntu apt installation steps below are conditional reference instructions only; first identify the installed OS. Do not run the Ubuntu repository setup on Raspberry Pi OS.
+You mentioned installing ROS 2 on Day 2. This chapter assumes you meant installing ROS 2 Jazzy on the Raspberry Pi; the exact Day 2 installation commands and results remain to be supplied. Your hardware is Raspberry Pi 4B and TurtleBot Burger with a 32 GB SanDisk card. Your supplied terminal output now verifies Ubuntu 24.04.5 LTS (Noble Numbat), arm64, on the Pi. The OS check below is observed evidence; the remaining setup and communication steps are reference instructions. Jazzy is the ROS release, not the operating system.
 
-### 1. Log in and identify the Pi
+### 1. Log in and verify the Pi operating system
 
 **Run on:** Laptop → Pi
 
-Your Pi is a Raspberry Pi 4B. Identify the existing installation before changing it. Use the username and address you configured; replace PI_USER and PI_IP with real values. If SSH is not available, run the identification commands directly with a keyboard and display.
+You supplied terminal output from the Pi confirming its operating system and architecture. This evidence was provided later while documenting the build; its execution on Day 2 is not established. If connecting remotely, use your configured username and address in place of PI_USER and PI_IP. The SSH command is a reference example, not a recovered command.
 
 ```bash
 ssh PI_USER@PI_IP
@@ -196,7 +196,19 @@ dpkg --print-architecture
 
 Confirms which machine you are on, its OS version, and its package architecture.
 
-**Checkpoint:** Continue with this reference only for Ubuntu 24.04 arm64 on a compatible Pi.
+**Observed output (relevant lines supplied by the author):**
+
+```text
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+UBUNTU_CODENAME=noble
+arm64
+```
+
+**Checkpoint:** Observed: Ubuntu 24.04.5 LTS, Noble, arm64 (64-bit ARM). This confirms the Pi OS and architecture only; it does not prove ROS is installed or that laptop–Pi communication works.
 
 
 
@@ -276,11 +288,11 @@ In another configured terminal, lists discovered topics and nodes.
 
 **Run on:** TurtleBot hardware
 
-ROS installation is only the foundation. You confirmed TurtleBot Burger and Raspberry Pi 4B. The exact robot revision, installed OS, motor-controller firmware, LiDAR model, USB permissions, robot packages, and launch configuration still need identifying before writing exact bringup commands. TurtleBot3 instructions should only be used if this is a TurtleBot3.
+ROS installation is only the foundation. You confirmed TurtleBot Burger and Raspberry Pi 4B. The exact robot revision, motor-controller firmware, LiDAR model, USB permissions, robot packages, and launch configuration still need identifying before writing exact bringup commands. TurtleBot3 instructions should only be used if this is a TurtleBot3.
 
-Still to record: exact robot revision, OS image, package branches, any workspace build, firmware steps, errors and fixes, launch command, and actual test result. No motor or firmware commands are presented as completed.
+Still to record: exact robot revision, original OS image filename, package branches, any workspace build, firmware steps, errors and fixes, launch command, and actual test result. No motor or firmware commands are presented as completed.
 
-**Checkpoint:** Next milestone: identify the installed OS and add the commands you actually ran on Day 2.
+**Checkpoint:** Next milestone: add the actual ROS installation commands, ROS_DISTRO output, and Day 2 test results.
 
 
 
