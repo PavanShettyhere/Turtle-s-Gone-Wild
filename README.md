@@ -3,6 +3,7 @@
 Pavan’s growing TurtleBot build journal: ROS 2 Jazzy, Raspberry Pi, explained terminal commands, and future experiments.
 
 - [Interactive journal](https://PavanShettyhere.github.io/Turtle-s-Gone-Wild/)
+- [Quick command cheat sheet](https://PavanShettyhere.github.io/Turtle-s-Gone-Wild/cheatsheet.html)
 - [Full day-by-day document](JOURNAL.md)
 - [Template for the next day](DAY-TEMPLATE.md)
 
@@ -40,3 +41,5 @@ Open http://localhost:8000. No npm packages, external fonts, or runtime services
 ## Visual guide
 
 The midnight-blue, cyan, and coral design includes original SVG hardware illustrations, switchable SSH/ROS message explanations, and a miniature TurtleBot animation. The animation is a browser demonstration, not robot control. Pause animations with the on-page control; system reduced-motion preferences are respected. Assets are local to `docs/assets/`.
+
+The separate cheat sheet lives in `docs/cheatsheet.html`, with search/filter/copy behavior in `docs/cheatsheet.js`. Edit these directly; the journal generator preserves them.
