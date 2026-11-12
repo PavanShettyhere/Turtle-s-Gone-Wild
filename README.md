@@ -36,3 +36,7 @@ Open http://localhost:8000. No npm packages, external fonts, or runtime services
 ## Files
 
 `docs/journal.json` is the content source. `scripts/template.html` and `docs/style.css` define the presentation. `docs/app.js` handles interactions. `scripts/build.py` generates both document formats. Do not edit generated files directly.
+
+## Visual guide
+
+The midnight-blue, cyan, and coral design includes original SVG hardware illustrations, switchable SSH/ROS message explanations, and a miniature TurtleBot animation. The animation is a browser demonstration, not robot control. Pause animations with the on-page control; system reduced-motion preferences are respected. Assets are local to `docs/assets/`.
