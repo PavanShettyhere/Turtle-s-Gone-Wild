@@ -192,6 +192,51 @@
       ]
     },
     {
+      "id": "day-3",
+      "label": "Day 03",
+      "title": "First drive",
+      "subtitle": "A borrowed battery, keyboard teleop & a LiDAR mystery",
+      "status": "First drive reported · LiDAR scans unresolved",
+      "intro": "Two days of staring at a terminal. One keypress. It finally moved. 🤖⌨️ Day 3 of my 15-day TurtleBot series. The replacement battery was still two weeks away, so I borrowed a 3S LiPo from a friend. Then I got home and realized the plugs didn’t match. These milestones are from my Day 3 note; exact commands and terminal logs have not been recorded here.",
+      "steps": [
+        {
+          "title": "Connect the borrowed battery",
+          "device": "TurtleBot3 Burger / battery",
+          "body": "Built an adapter to connect the XT60 and T-connectors so I could use the borrowed 3S LiPo while waiting for the replacement battery.",
+          "commands": [],
+          "check": "Adapter built; the borrowed battery powered the first-drive session."
+        },
+        {
+          "title": "Test movement with the OpenCR buttons",
+          "device": "TurtleBot3 Burger / OpenCR",
+          "body": "Tested forward motion and turning with the OpenCR’s built-in buttons.",
+          "commands": [],
+          "check": "Forward motion and turning reported working."
+        },
+        {
+          "title": "Drive from the laptop keyboard",
+          "device": "Laptop → TurtleBot3 Burger",
+          "body": "Drove the TurtleBot from my laptop keyboard using ROS 2 teleop. After two days at the terminal, the robot finally moved with a keypress.",
+          "commands": [],
+          "check": "First drive ✅ Keyboard teleoperation reported working."
+        },
+        {
+          "title": "Try mapping a mini maze",
+          "device": "TurtleBot3 Burger / LiDAR",
+          "body": "Set up a mini maze for mapping. The LiDAR was spinning, but every scan came back as zeros. The cause is still unresolved.",
+          "commands": [],
+          "check": "Next up: get the LiDAR working and map the maze. A successful map has not yet been reported."
+        },
+        {
+          "title": "Resources from the Day 3 note",
+          "device": "Reference notes",
+          "body": "Where to buy: MYBOTSHOP or Génération Robots. Search for “TurtleBot3 Burger.”\n\nDocs: ROBOTIS e-Manual and ROS 2 Jazzy Documentation.\n\n#TurtleBot3 #ROS2 #Robotics #LiDAR #MobileRobotics",
+          "commands": [],
+          "check": "Continue the 15-day series with LiDAR troubleshooting and mapping."
+        }
+      ]
+    },
+    {
       "id": "git",
       "label": "Git & GitHub",
       "title": "Give the journey a home",

@@ -296,6 +296,66 @@ Still to record: exact robot revision, original OS image filename, package branc
 
 
 
+## Day 03 — First drive
+
+First drive reported · LiDAR scans unresolved
+
+Two days of staring at a terminal. One keypress. It finally moved. 🤖⌨️ Day 3 of my 15-day TurtleBot series. The replacement battery was still two weeks away, so I borrowed a 3S LiPo from a friend. Then I got home and realized the plugs didn’t match. These milestones are from my Day 3 note; exact commands and terminal logs have not been recorded here.
+
+### 1. Connect the borrowed battery
+
+**Run on:** TurtleBot3 Burger / battery
+
+Built an adapter to connect the XT60 and T-connectors so I could use the borrowed 3S LiPo while waiting for the replacement battery.
+
+**Checkpoint:** Adapter built; the borrowed battery powered the first-drive session.
+
+
+
+### 2. Test movement with the OpenCR buttons
+
+**Run on:** TurtleBot3 Burger / OpenCR
+
+Tested forward motion and turning with the OpenCR’s built-in buttons.
+
+**Checkpoint:** Forward motion and turning reported working.
+
+
+
+### 3. Drive from the laptop keyboard
+
+**Run on:** Laptop → TurtleBot3 Burger
+
+Drove the TurtleBot from my laptop keyboard using ROS 2 teleop. After two days at the terminal, the robot finally moved with a keypress.
+
+**Checkpoint:** First drive ✅ Keyboard teleoperation reported working.
+
+
+
+### 4. Try mapping a mini maze
+
+**Run on:** TurtleBot3 Burger / LiDAR
+
+Set up a mini maze for mapping. The LiDAR was spinning, but every scan came back as zeros. The cause is still unresolved.
+
+**Checkpoint:** Next up: get the LiDAR working and map the maze. A successful map has not yet been reported.
+
+
+
+### 5. Resources from the Day 3 note
+
+**Run on:** Reference notes
+
+Where to buy: MYBOTSHOP or Génération Robots. Search for “TurtleBot3 Burger.”
+
+Docs: ROBOTIS e-Manual and ROS 2 Jazzy Documentation.
+
+#TurtleBot3 #ROS2 #Robotics #LiDAR #MobileRobotics
+
+**Checkpoint:** Continue the 15-day series with LiDAR troubleshooting and mapping.
+
+
+
 ## Git & GitHub — Give the journey a home
 
 Commands supplied by you · execution not evidenced
