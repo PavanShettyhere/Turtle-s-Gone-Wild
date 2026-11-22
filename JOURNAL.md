@@ -356,6 +356,190 @@ Docs: ROBOTIS e-Manual and ROS 2 Jazzy Documentation.
 
 
 
+## Day 04 — Build the first maze map
+
+Map saved · scan quality still limited
+
+Day 4 moved from keyboard driving to mapping the maze with Cartographer. The project records include a saved map image and YAML file, live scan and odometry checks, and the first saved-map localization experiments. Recovering usable LiDAR points enabled an experimental map; it did not establish a hardware repair.
+
+### 1. Recover usable scan data
+
+**Run on:** TurtleBot3 Burger / Pi
+
+Used the experimental packet-resynchronizing LiDAR reader with robot bringup. It rejects checksum failures and leaves missing measurements as NaN instead of filling gaps or reusing old points. Corruption had also been reproduced during direct sensor testing.
+
+**Checkpoint:** Live scans were available, but coverage remained incomplete and the physical cause was unresolved.
+
+
+
+### 2. Map the maze with Cartographer
+
+**Run on:** Laptop + TurtleBot3 Burger
+
+Ran Cartographer and its occupancy-grid publisher while exploring with keyboard teleoperation. The mapping session verified live scans near 5 Hz, odometry near 20 Hz, and the map-to-sensor transform. Saved the map as slam_trial_20261114_143646.pgm with its YAML metadata.
+
+**Checkpoint:** First map saved. This was an experimental map made with degraded scan data.
+
+
+
+### 3. Inspect the map and localization in RViz
+
+**Run on:** Laptop
+
+Started working with the saved map and AMCL. Investigated invisible scans and pose displays: the LaserScan display needed Best Effort reliability, and the estimated pose needed its own display. Created a dedicated Nav2 RViz configuration.
+
+**Checkpoint:** The recorded live check found AMCL publishing a pose and a map-to-base_scan transform.
+
+
+
+### 4. Carry the timing problems forward
+
+**Run on:** Laptop + Pi
+
+Early navigation attempts exposed inactive lifecycle nodes, stale transforms and uneven scan delivery. One comparison showed roughly 5.2 Hz scans on the Pi, while laptop reception included a 5.213-second gap. Clock synchronization was active, but that alone did not identify the delivery problem.
+
+**Checkpoint:** Next: repeat Nav2 tests using the saved map and investigate scan and transform reliability.
+
+
+
+## Day 05 — First Nav2 tests
+
+Navigation tested · repeatable autonomy unresolved
+
+Day 5 focused on Nav2 after the Cartographer mapping session. I made a fresh map, set the starting pose, tried navigation goals, and adjusted speed during testing. The day’s recap describes autonomous movement; the troubleshooting record also contains aborted goals and intermittent transform failures, so reliable navigation remained unfinished.
+
+### 1. Save a fresh map
+
+**Run on:** Laptop / Cartographer
+
+Recorded and saved a new Cartographer map as day5_20261116_222203.pgm and day5_20261116_222203.yaml for the navigation tests.
+
+**Checkpoint:** Fresh map image and metadata are present in the project maps folder.
+
+
+
+### 2. Localize and send navigation goals
+
+**Run on:** Laptop / RViz + AMCL + Nav2
+
+Launched saved-map localization, set the robot’s position and heading using 2D Pose Estimate, and started Nav2. Tested sending goals in RViz and learned how obstacle inflation and goal tolerances affect the robot’s behavior.
+
+**Checkpoint:** Map saving, AMCL pose publishing and Nav2 startup worked; goal execution was not consistently reliable.
+
+
+
+### 3. Adjust the speed for testing
+
+**Run on:** Laptop / Nav2
+
+Reduced forward speed to 0.10 m/s, then increased it slightly to 0.15 m/s. The session recorded successful live changes to the velocity smoother and controller limits. These were runtime settings rather than evidence of a permanent configuration change.
+
+**Checkpoint:** The final reported forward limit for that session was 0.15 m/s.
+
+
+
+### 4. Investigate navigation stops
+
+**Run on:** Laptop + Pi
+
+Checked clock synchronization, scan and odometry rates, transforms, CPU load, and network connectivity. Increased the scan timeout from 0.2 to 0.5 seconds to address a timing mismatch. A laptop-to-Pi ping test had no packet loss in 30 packets, but intermittent TF failures and corrupted scans remained.
+
+**Checkpoint:** Next: resolve the odom-to-base_link connection and LiDAR reliability, then repeat short goals. A short successful ping test does not establish healthy ROS delivery.
+
+
+
+## Day 06 — Distance on display
+
+Distance bridge and status display working
+
+Day 6 added a front-distance sensor and a small status screen to the TurtleBot. I connected a VL53L0X and a 128 × 64 OLED to the ESP32, then bridged the ESP32 to the Raspberry Pi and ROS 2 over USB. The goal was to see distance and robot status without constantly checking the laptop, and prepare for later obstacle-aware driving.
+
+### 1. Wire the sensor and display
+
+**Run on:** ESP32 / VL53L0X / OLED
+
+Connected the distance sensor and OLED on the same I²C bus. The ESP32 sketch reads distance and displays it locally.
+
+**Checkpoint:** The OLED showed distance measurements from the sensor.
+
+
+
+### 2. Publish distance into ROS 2
+
+**Run on:** ESP32 → USB → Raspberry Pi
+
+Sent newline-delimited JSON from the ESP32 over USB serial at 115200 baud. The Pi bridge converts millimetres into metres and publishes sensor_msgs/Range on /front_distance at about 10 readings per second, using front_distance_link as the frame name.
+
+**Checkpoint:** ROS received distance readings. Naming a frame does not by itself establish the physical mounting transform.
+
+
+
+### 3. Show motion and connection status
+
+**Run on:** ROS odometry → ESP32 OLED
+
+Used robot odometry to send IDLE or DRIVING status back to the ESP32. Stopped status updates deliberately and verified the OLED switched to NO LINK after three seconds.
+
+**Checkpoint:** The status display and timeout behavior were verified in the Day 6 session.
+
+
+
+### 4. Debug serial data and invalid ranges
+
+**Run on:** ESP32 + Pi
+
+Initially received garbled serial data. Switching the connection from 9600 back to 115200 baud restored readable messages in that session. Invalid or out-of-limits sensor readings became NaN in ROS. Increasing max_range to 6.0 did not recover missing measurements or increase the sensor’s physical reach.
+
+**Checkpoint:** Learned serial bridging, unit conversion and invalid-data handling. Distance reporting worked; automatic obstacle response remained a future task.
+
+
+
+## Day 07 — Understand drift and plan sensor fusion
+
+Concepts and experiment plan · implementation scheduled for Day 8
+
+Day 7 was about understanding how the TurtleBot knows which way it is facing. I prepared an explanation of gyroscope drift and the complementary roles of wheel encoders, an IMU and LiDAR. The Day 7 script explicitly left hardware implementation for the following day; the later working session was corrected to Day 8.
+
+### 1. Explain gyroscope drift
+
+**Run on:** Learning notes / video script
+
+Explored how angular-rate measurements accumulate into a heading estimate, and how a small stationary offset can accumulate into angle error. Distinguished the gyroscope from the full IMU.
+
+**Checkpoint:** The Day 7 milestone was understanding and explaining drift, not a completed calibration.
+
+
+
+### 2. Compare the sensor roles
+
+**Run on:** TurtleBot motion-estimation plan
+
+Outlined wheel odometry for motion estimates, IMU measurements for rotation, and LiDAR localization against the map. Planned to investigate the motion estimate because navigation had been inconsistent.
+
+**Checkpoint:** Gyroscope drift was not established as the cause of the earlier Nav2 failures; the scan and transform issues still needed attention.
+
+
+
+### 3. Plan an additional IMU experiment
+
+**Run on:** ESP32 → Raspberry Pi → ROS 2 (planned)
+
+Proposed testing an additional module described at the time as an MPU-9250, reading it through the ESP32, calibrating it, and publishing measurements into ROS 2. Planned wheel-odometry and IMU fusion with an Extended Kalman Filter, with LiDAR localization supplying the map reference. The module identity still needed a hardware check.
+
+**Checkpoint:** Hardware identification, calibration and filter implementation belong to the subsequent Day 8 work.
+
+
+
+### 4. Define how to judge improvement
+
+**Run on:** Experiment plan / series visuals
+
+Planned to repeat the same route and compare the estimated final heading rather than assume fusion would improve it. Prepared the Day 7 voiceover and explanatory animations covering rotation, drift, sensor roles, EKF estimation and the proposed repeat-route test.
+
+**Checkpoint:** Day 7 ended with a testable plan. No completed fusion integration or measured navigation improvement is claimed.
+
+
+
 ## Git & GitHub — Give the journey a home
 
 Commands supplied by you · execution not evidenced

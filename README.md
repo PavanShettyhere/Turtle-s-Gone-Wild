@@ -11,6 +11,15 @@ Pavan’s growing TurtleBot build journal: ROS 2 Jazzy, Raspberry Pi, explained 
 
 Day 1 milestones come from the author’s description. Detailed commands are a reference reconstruction, not recovered terminal history. Day 2 assumes a Pi installation and is explicitly awaiting confirmation. Confirmed hardware: Raspberry Pi 4B, TurtleBot Burger, and a 32 GB SanDisk microSD card. Supplied terminal evidence verifies the Pi currently runs Ubuntu 24.04.5 LTS (Noble Numbat), arm64. The original image filename, flashing sequence, dates, and ROS installation/test outputs remain unconfirmed. Official sources are linked in the journal. Robot-specific bringup is intentionally pending hardware identification.
 
+## Latest journal entries
+
+- Day 4: Cartographer maze mapping and initial localization checks.
+- Day 5: Nav2 goal tests, speed adjustments and unresolved scan/transform issues.
+- Day 6: ESP32 distance bridge and OLED status display.
+- Day 7: Gyroscope drift explanation and sensor-fusion experiment plan; hardware implementation follows in Day 8.
+
+Days 4–7 were reconstructed from the project chats and available local artifacts. Completed work is distinguished from proposed tests; they are not a recovered command-by-command terminal history.
+
 ## Add a day
 
 Edit `docs/journal.json`, copy an existing day structure with a new unique ID, and add the actual commands, explanations, output, errors, and evidence. Then:
